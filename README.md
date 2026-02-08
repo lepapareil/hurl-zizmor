@@ -9,7 +9,7 @@
 [![Crates.io](https://img.shields.io/crates/v/hurl.svg)](https://crates.io/crates/hurl)
 [![documentation](https://img.shields.io/badge/-documentation-ff0288)](https://hurl.dev)
 
-# What's Hurl     ?
+# What's Hurl?
 
 Hurl is a command line tool that runs <b>HTTP requests</b> defined in a simple <b>plain text format</b>.
 
@@ -44,7 +44,7 @@ GET https://example.org/api/step2
 GET https://example.org/api/step3
 ```
 
-# Also an HTTP Test Tool   ?
+# Also an HTTP Test Tool
 
 Hurl can run HTTP requests but can also be used to <b>test HTTP responses</b>.
 Different types of queries and predicates are supported, from [XPath] and [JSONPath] on body response,
@@ -1565,7 +1565,7 @@ Precompiled binary (depending on libc >=2.35) is available at [Hurl latest GitHu
 
 ```shell
 $ INSTALL_DIR=/tmp
-$ VERSION=7.1.0
+$ VERSION=8.0.0
 $ curl --silent --location https://github.com/Orange-OpenSource/hurl/releases/download/$VERSION/hurl-$VERSION-x86_64-unknown-linux-gnu.tar.gz | tar xvz -C $INSTALL_DIR
 $ export PATH=$INSTALL_DIR/hurl-$VERSION-x86_64-unknown-linux-gnu/bin:$PATH
 ```
@@ -1575,7 +1575,7 @@ $ export PATH=$INSTALL_DIR/hurl-$VERSION-x86_64-unknown-linux-gnu/bin:$PATH
 For Debian >=12 / Ubuntu 22.04 and 24.04, Hurl can be installed using a binary .deb file provided in each Hurl release.
 
 ```shell
-$ VERSION=7.1.0
+$ VERSION=8.0.0
 $ curl --location --remote-name https://github.com/Orange-OpenSource/hurl/releases/download/$VERSION/hurl_${VERSION}_amd64.deb
 $ sudo apt update && sudo apt install ./hurl_${VERSION}_amd64.deb
 ```
@@ -1583,7 +1583,7 @@ $ sudo apt update && sudo apt install ./hurl_${VERSION}_amd64.deb
 For Ubuntu >=22.04, Hurl can be installed from `ppa:lepapareil/hurl`
 
 ```shell
-$ VERSION=7.1.0
+$ VERSION=8.0.0
 $ sudo apt-add-repository -y ppa:lepapareil/hurl
 $ sudo apt install hurl="${VERSION}"*
 ```
