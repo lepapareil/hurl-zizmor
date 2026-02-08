@@ -190,7 +190,7 @@ jobs:
             gh pr comment "${PR_NUMBER}" --body "${comment}"
             exit 1
           fi
-          diff_count=$(grep -c ^+ "${env.REMAINING_COMMITS_FILE}" || true)
+          diff_count=$(grep -c ^+ "${REMAINING_COMMITS_FILE}" || true)
           if [[ ${diff_count} -eq 0 ]] ; then
             comment="👌 No needs to auto rebase, \`${HEAD_REPO_FULL_NAME}/${HEAD_REF}\` is already rebased from \`${BASE_REPO_FULL_NAME}/${BASE_REF}\`."
             echo "${comment}" 
