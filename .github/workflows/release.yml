@@ -17,6 +17,7 @@ jobs:
     env:
       GITHUB_BRANCH_NAME: ${{ github.ref_name }}
       GITHUB_CONTEXT: ${{ toJson(github) }}
+      GITHUB_TOKEN: ${{ secrets.HURL_BOT_TOKEN }}
       SET_RELEASE_VERSION: ${{ github.event.inputs.set-release-version }}
     outputs:
       release_version: ${{ steps.set-release-version.outputs.release_version }}
@@ -59,6 +60,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: true
+          token: ${{ secrets.HURL_BOT_TOKEN }}
 
       - name: Check release pull request existence
         id: check-release-pull-request-existence
@@ -94,6 +98,7 @@ jobs:
         id: check-github-release-existence
         run: |
           gh release list || true
+          # shellcheck disable=SC2001
           escaped_version=$(echo "${RELEASE_VERSION}" | sed "s#\.#\\\.#g")
           github_release_exists=$(gh release list | (grep -c "${escaped_version}" || true))
           if [[ ${github_release_exists} -eq 0 ]] ; then
@@ -118,6 +123,7 @@ jobs:
       - name: Check tag existence
         id: check-tag-existence
         run: |
+          # shellcheck disable=SC2001
           escaped_version=$(echo "${RELEASE_VERSION}" | sed "s#\.#\\\.#g")
           tag_exists=$(git ls-remote --tags | (grep -c "${escaped_version}" || true))
           if [[ ${tag_exists} -eq 0 ]] ; then
@@ -143,6 +149,7 @@ jobs:
         id: check-release-branch-existence
         if: github.ref_name == 'master'
         run: |
+          # shellcheck disable=SC2001
           escaped_version=$(echo "${RELEASE_VERSION}" | sed "s#\.#\\\.#g")
           branch_exists=$(git ls-remote | (grep -c "${escaped_version}" || true))
           if [[ ${branch_exists} -eq 0 ]] ; then
@@ -180,6 +187,7 @@ jobs:
         if: github.ref_name == 'master'
         uses: actions/checkout@v6.0.2
         with:
+          persist-credentials: true
           token: ${{ secrets.HURL_BOT_TOKEN }}
 
       - name: Create release branch
@@ -198,6 +206,7 @@ jobs:
       - name: Checkout new release branch
         uses: actions/checkout@v6.0.2
         with:
+          persist-credentials: true
           ref: ${{ needs.set-context.outputs.release_branch }}
           token: ${{ secrets.HURL_BOT_TOKEN }}
 
@@ -246,14 +255,17 @@ jobs:
           python3 bin/docs/build_readme.py crates > packages/hurl/README.md
 
       - name: Init git bot context
-        uses: crazy-max/ghaction-import-gpg@v6.3.0
-        with:
-          gpg_private_key: ${{ secrets.HURL_BOT_GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.HURL_BOT_GPG_PRIVATE_KEY_PASSPHRASE }}
-          git_committer_name: ${{ secrets.HURL_BOT_USER }}
-          git_committer_email: ${{ secrets.HURL_BOT_EMAIL }}
-          git_user_signingkey: true
-          git_commit_gpgsign: true
+        env:
+          HURL_BOT_GPG_PRIVATE_KEY: ${{ secrets.HURL_BOT_GPG_PRIVATE_KEY }}
+          HURL_BOT_USER: ${{ secrets.HURL_BOT_USER }}
+          HURL_BOT_EMAIL: ${{ secrets.HURL_BOT_EMAIL }}
+        run: |
+          echo "${HURL_BOT_GPG_PRIVATE_KEY}" | gpg --batch --import
+          HURL_BOT_GPG_KEY_ID=$(gpg --list-secret-keys --keyid-format=long | grep sec | head -n1 | sed 's/.*\/\([^ ]*\) .*/\1/')
+          git config user.name "${HURL_BOT_USER}"
+          git config user.email "${HURL_BOT_EMAIL}"
+          git config user.signingkey "${HURL_BOT_GPG_KEY_ID}"
+          git config commit.gpgsign true
 
       - name: Push create release commits
         run: |
@@ -291,11 +303,11 @@ jobs:
 
   deliver-github-release:
     env:
-      GITHUB_CONTEXT: ${{ toJson(github) }}
-      GITHUB_TOKEN: ${{ secrets.HURL_BOT_TOKEN }}
       GITHUB_BRANCH_NAME: ${{ github.ref_name }}
       GITHUB_OWNER: ${{ github.repository_owner }}
       GITHUB_REPO_NAME: ${{ github.event.repository.name }}
+      GITHUB_CONTEXT: ${{ toJson(github) }}
+      GITHUB_TOKEN: ${{ secrets.HURL_BOT_TOKEN }}
       RELEASE_VERSION: ${{ needs.set-context.outputs.release_version }}
       RELEASE_BRANCH: ${{ needs.set-context.outputs.release_branch }}
     needs:
@@ -311,16 +323,20 @@ jobs:
         with:
           persist-credentials: true
           ref: ${{ needs.set-context.outputs.release_branch }}
+          token: ${{ secrets.HURL_BOT_TOKEN }}
 
       - name: Init git bot context
-        uses: crazy-max/ghaction-import-gpg@v6.3.0
-        with:
-          gpg_private_key: ${{ secrets.HURL_BOT_GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.HURL_BOT_GPG_PRIVATE_KEY_PASSPHRASE }}
-          git_committer_name: ${{ secrets.HURL_BOT_USER }}
-          git_committer_email: ${{ secrets.HURL_BOT_EMAIL }}
-          git_user_signingkey: true
-          git_commit_gpgsign: true
+        env:
+          HURL_BOT_GPG_PRIVATE_KEY: ${{ secrets.HURL_BOT_GPG_PRIVATE_KEY }}
+          HURL_BOT_USER: ${{ secrets.HURL_BOT_USER }}
+          HURL_BOT_EMAIL: ${{ secrets.HURL_BOT_EMAIL }}
+        run: |
+          echo "${HURL_BOT_GPG_PRIVATE_KEY}" | gpg --batch --import
+          HURL_BOT_GPG_KEY_ID=$(gpg --list-secret-keys --keyid-format=long | grep sec | head -n1 | sed 's/.*\/\([^ ]*\) .*/\1/')
+          git config user.name "${HURL_BOT_USER}"
+          git config user.email "${HURL_BOT_EMAIL}"
+          git config user.signingkey "${HURL_BOT_GPG_KEY_ID}"
+          git config commit.gpgsign true
 
       - uses: actions/download-artifact@v7.0.0
         with:
@@ -351,6 +367,7 @@ jobs:
             artifacts/release-windows-x64-artifacts/hurl-"${RELEASE_VERSION}"-x86_64-pc-windows-msvc-installer.exe \
             artifacts/release-windows-x64-artifacts/hurl-"${RELEASE_VERSION}"-x86_64-pc-windows-msvc.zip
             echo "file,sha256" > release-"${RELEASE_VERSION}".sha256.csv
+            # shellcheck disable=SC2016
             find ./artifacts -name "*sha256" -print0 | xargs -0 -I FILE sh -c 'echo "https://github.com/${GITHUB_OWNER}/${GITHUB_REPO_NAME}/releases/download/${RELEASE_VERSION}/$(basename FILE),$(cat FILE)"' >> release-"${RELEASE_VERSION}".sha256.csv
 
       - name: Archive sha256 artifacts
