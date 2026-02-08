@@ -9,7 +9,7 @@ We always have to start with current version x.y.0-snapshot (in all Cargo.toml).
 - Use a well formatted description on PR (starts with a verb)
 - Add link(s) to the issue
 
-## Release steps
+## Release steps ///
 
 Used to publish a new release from master branch (normal process).
 
