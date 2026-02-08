@@ -358,7 +358,7 @@ jobs:
             artifacts/release-windows-x64-artifacts/hurl-"${RELEASE_VERSION}"-x86_64-pc-windows-msvc-installer.exe \
             artifacts/release-windows-x64-artifacts/hurl-"${RELEASE_VERSION}"-x86_64-pc-windows-msvc.zip
             echo "file,sha256" > release-"${RELEASE_VERSION}".sha256.csv
-            find ./artifacts -name "*sha256" -print0 | xargs -I FILE sh -c 'echo "https://github.com/${GITHUB_OWNER}/${GITHUB_REPO_NAME}/releases/download/${RELEASE_VERSION}/$(basename FILE),$(cat FILE)"' >> release-"${RELEASE_VERSION}".sha256.csv
+            find ./artifacts -name "*sha256" | xargs -I FILE sh -c 'echo "https://github.com/${GITHUB_OWNER}/${GITHUB_REPO_NAME}/releases/download/${RELEASE_VERSION}/$(basename FILE),$(cat FILE)"' >> release-"${RELEASE_VERSION}".sha256.csv
 
       - name: Archive sha256 artifacts
         uses: actions/upload-artifact@v6.0.0
