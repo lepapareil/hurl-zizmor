@@ -2,7 +2,7 @@
 
 Thank you for investing time in our project!
 
-## Issues
+## Issues ?
 
 Whether you have discovered a bug, want a new feature in Hurl, or change code, [please fill an issue] or [start a discussion]
 before any PR. We like to discuss things before implementation and want to be sure that: 
