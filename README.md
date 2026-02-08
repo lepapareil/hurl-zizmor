@@ -44,7 +44,7 @@ GET https://example.org/api/step2
 GET https://example.org/api/step3
 ```
 
-# Also an HTTP Test Tool
+# Also an HTTP Test Tool   ?
 
 Hurl can run HTTP requests but can also be used to <b>test HTTP responses</b>.
 Different types of queries and predicates are supported, from [XPath] and [JSONPath] on body response,
