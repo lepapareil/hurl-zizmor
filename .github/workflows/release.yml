@@ -256,8 +256,8 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.HURL_BOT_GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.HURL_BOT_GPG_PRIVATE_KEY_PASSPHRASE }}
-          git_committer_name: "hurl-bot"
-          git_committer_email: "filipe.pinto@orange.com"
+          git_committer_name: ${{ secrets.HURL_BOT_USER }}
+          git_committer_email: ${{ secrets.HURL_BOT_EMAIL }}
           git_user_signingkey: true
           git_commit_gpgsign: true
 
@@ -324,8 +324,8 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.HURL_BOT_GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.HURL_BOT_GPG_PRIVATE_KEY_PASSPHRASE }}
-          git_committer_name: "hurl-bot"
-          git_committer_email: "filipe.pinto@orange.com"
+          git_committer_name: ${{ secrets.HURL_BOT_USER }}
+          git_committer_email: ${{ secrets.HURL_BOT_EMAIL }}
           git_user_signingkey: true
           git_commit_gpgsign: true
 
@@ -358,7 +358,7 @@ jobs:
             artifacts/release-windows-x64-artifacts/hurl-"${RELEASE_VERSION}"-x86_64-pc-windows-msvc-installer.exe \
             artifacts/release-windows-x64-artifacts/hurl-"${RELEASE_VERSION}"-x86_64-pc-windows-msvc.zip
             echo "file,sha256" > release-"${RELEASE_VERSION}".sha256.csv
-            find ./artifacts -name "*sha256" | xargs -I FILE sh -c 'echo "https://github.com/${GITHUB_OWNER}/${GITHUB_REPO_NAME}/releases/download/${RELEASE_VERSION}/$(basename FILE),$(cat FILE)"' >> release-"${RELEASE_VERSION}".sha256.csv
+            find ./artifacts -name "*sha256" -print0 | xargs -0 -I FILE sh -c 'echo "https://github.com/${GITHUB_OWNER}/${GITHUB_REPO_NAME}/releases/download/${RELEASE_VERSION}/$(basename FILE),$(cat FILE)"' >> release-"${RELEASE_VERSION}".sha256.csv
 
       - name: Archive sha256 artifacts
         uses: actions/upload-artifact@v6.0.0
