@@ -59,8 +59,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
-        with:
-          persist-credentials: true
 
       - name: Check release pull request existence
         id: check-release-pull-request-existence
@@ -182,7 +180,7 @@ jobs:
         if: github.ref_name == 'master'
         uses: actions/checkout@v6.0.2
         with:
-          persist-credentials: true
+          token: ${{ secrets.HURL_BOT_TOKEN }}
 
       - name: Create release branch
         if: github.ref_name == 'master'
@@ -200,7 +198,6 @@ jobs:
       - name: Checkout new release branch
         uses: actions/checkout@v6.0.2
         with:
-          persist-credentials: true
           ref: ${{ needs.set-context.outputs.release_branch }}
 
       - name: Check CHANGELOG
