@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v6.0.1
+      uses: actions/checkout@v6.0.2
       with:
         persist-credentials: false
         ref: ${{ inputs.branch }}
@@ -48,7 +48,7 @@ jobs:
         bin/release/release.sh
         echo "${PWD}/target/release" >> "${GITHUB_PATH}"
     - name: Archive artifacts
-      uses: actions/upload-artifact@v6.0.0
+      uses: actions/upload-artifact@v7.0.0
       if: ${{ always() }}
       with:
         name: tests-bench-artifacts
@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v6.0.1
+      uses: actions/checkout@v6.0.2
       with:
         persist-credentials: false
         ref: ${{ inputs.branch }}
@@ -81,7 +81,7 @@ jobs:
         rust: [stable]
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v6.0.1
+      uses: actions/checkout@v6.0.2
       with:
         persist-credentials: false
         ref: ${{ inputs.branch }}
@@ -119,7 +119,7 @@ jobs:
         bin/test/test_integ.sh || true
         cd "${current_dir}"
     - name: Archive production artifacts
-      uses: actions/upload-artifact@v6.0.0
+      uses: actions/upload-artifact@v7.0.0
       if: ${{ always() }}
       with:
         name: tests-ubuntu-latest-${{ matrix.rust }}-artifacts
@@ -135,7 +135,7 @@ jobs:
         rust: [stable]
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v6.0.1
+      uses: actions/checkout@v6.0.2
       with:
         persist-credentials: false
         ref: ${{ inputs.branch }}
@@ -163,7 +163,7 @@ jobs:
     - name: Integration Tests
       run: bin/test/test_integ.sh
     - name: Archive production artifacts
-      uses: actions/upload-artifact@v6.0.0
+      uses: actions/upload-artifact@v7.0.0
       if: ${{ always() }}
       with:
         name: tests-ubuntu-22.04-${{ matrix.rust }}-artifacts
@@ -178,7 +178,7 @@ jobs:
       image: archlinux
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v6.0.1
+      uses: actions/checkout@v6.0.2
       with:
         persist-credentials: false
         ref: ${{ inputs.branch }}
@@ -201,7 +201,7 @@ jobs:
       run: |
         bin/test/test.sh
     - name: Archive production artifacts
-      uses: actions/upload-artifact@v6.0.0
+      uses: actions/upload-artifact@v7.0.0
       if: ${{ always() }}
       with:
         name: tests-archlinux-x64-artifacts
@@ -214,7 +214,7 @@ jobs:
       image: fedora
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v6.0.1
+      uses: actions/checkout@v6.0.2
       with:
         persist-credentials: false
         ref: ${{ inputs.branch }}
@@ -242,7 +242,7 @@ jobs:
         pwd
         find . -name "*.log"
     - name: Archive production artifacts
-      uses: actions/upload-artifact@v6.0.0
+      uses: actions/upload-artifact@v7.0.0
       if: ${{ always() }}
       with:
         name: tests-fedora-x64-artifacts
@@ -262,7 +262,7 @@ jobs:
         apk update --quiet
         apk add --quiet bash git
     - name: Checkout repository
-      uses: actions/checkout@v6.0.1
+      uses: actions/checkout@v6.0.2
       with:
         persist-credentials: false
         ref: ${{ inputs.branch }}
@@ -294,7 +294,7 @@ jobs:
         pwd
         find . -name "*.log"
     - name: Archive production artifacts
-      uses: actions/upload-artifact@v6.0.0
+      uses: actions/upload-artifact@v7.0.0
       if: ${{ always() }}
       with:
         name: tests-alpine-x64-artifacts
@@ -309,7 +309,7 @@ jobs:
         rust: [stable]
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v6.0.1
+      uses: actions/checkout@v6.0.2
       with:
         persist-credentials: false
         ref: ${{ inputs.branch }}
@@ -340,7 +340,7 @@ jobs:
         pwd
         find . -name "*.log"
     - name: Archive production artifacts
-      uses: actions/upload-artifact@v6.0.0
+      uses: actions/upload-artifact@v7.0.0
       if: ${{ always() }}
       with:
         name: tests-macos-x64-${{ matrix.rust }}-artifacts
@@ -355,7 +355,7 @@ jobs:
         rust: [stable]
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v6.0.1
+      uses: actions/checkout@v6.0.2
       with:
         persist-credentials: false
         ref: ${{ inputs.branch }}
@@ -386,7 +386,7 @@ jobs:
         pwd
         find . -name "*.log"
     - name: Archive production artifacts
-      uses: actions/upload-artifact@v6.0.0
+      uses: actions/upload-artifact@v7.0.0
       if: ${{ always() }}
       with:
         name: tests-macos-aarch64-${{ matrix.rust }}-artifacts
@@ -401,7 +401,7 @@ jobs:
         git config --global core.autocrlf false
         git config --global core.eol lf
     - name: Checkout repository
-      uses: actions/checkout@v6.0.1
+      uses: actions/checkout@v6.0.2
       with:
         persist-credentials: false
         ref: ${{ inputs.branch }}
@@ -427,7 +427,7 @@ jobs:
         .\bin\test\test_prerequisites.ps1
         .\bin\test\test_unit.ps1
     - name: Archive production artifacts
-      uses: actions/upload-artifact@v6.0.0
+      uses: actions/upload-artifact@v7.0.0
       if: ${{ always() }}
       with:
         name: tests-win64-${{ matrix.rust }}-artifacts
@@ -442,7 +442,7 @@ jobs:
         git config --global core.autocrlf false
         git config --global core.eol lf
     - name: Checkout repository
-      uses: actions/checkout@v6.0.1
+      uses: actions/checkout@v6.0.2
       with:
         persist-credentials: false
         ref: ${{ inputs.branch }}
@@ -497,7 +497,7 @@ jobs:
           bin/test/test_integ.sh
         echo "::endgroup::"
     - name: Archive production artifacts
-      uses: actions/upload-artifact@v6.0.0
+      uses: actions/upload-artifact@v7.0.0
       if: ${{ always() }}
       with:
         name: tests-win64-wsl2-artifacts
